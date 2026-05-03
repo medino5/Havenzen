@@ -140,17 +140,70 @@ if (($_GET['format'] ?? '') === 'txt') {
         }
 
         .receipt-mark {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #111827, #e91e63);
-            color: #fff;
-            font-size: 15px;
-            font-weight: 700;
+            width: 46px;
+            height: 34px;
+            color: #111827;
             display: flex;
             align-items: center;
             justify-content: center;
-            letter-spacing: 0.08em;
+            position: relative;
+        }
+
+        .receipt-mark-vehicle .receipt-roof {
+            position: absolute;
+            top: 0;
+            left: 13px;
+            width: 20px;
+            height: 16px;
+            border-left: 3px solid #e91e63;
+            border-top: 3px solid #e91e63;
+            transform: skewX(-28deg);
+        }
+
+        .receipt-mark-vehicle .receipt-vehicle-body {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            width: 38px;
+            height: 17px;
+            border: 3px solid #111827;
+            border-radius: 5px 7px 5px 5px;
+        }
+
+        .receipt-mark-vehicle .receipt-vehicle-body::before,
+        .receipt-mark-vehicle .receipt-vehicle-body::after {
+            content: "";
+            position: absolute;
+            bottom: -7px;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #111827;
+        }
+
+        .receipt-mark-vehicle .receipt-vehicle-body::before {
+            left: 5px;
+        }
+
+        .receipt-mark-vehicle .receipt-vehicle-body::after {
+            right: 5px;
+        }
+
+        .receipt-mark-vehicle .receipt-vehicle-body span {
+            position: absolute;
+            top: 3px;
+            width: 7px;
+            height: 5px;
+            background: #e91e63;
+            border-radius: 1px;
+        }
+
+        .receipt-mark-vehicle .receipt-vehicle-body span:first-child {
+            left: 7px;
+        }
+
+        .receipt-mark-vehicle .receipt-vehicle-body span:last-child {
+            right: 7px;
         }
 
         .receipt-brand-copy h1 {

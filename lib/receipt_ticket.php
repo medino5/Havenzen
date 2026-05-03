@@ -123,6 +123,8 @@ function hz_build_receipt_text(array $booking): string
     $contactShort = preg_replace('/\s+/', '', (string) ($booking['passenger_phone'] ?? ''));
 
     $receiptLines = array_merge(
+        hz_receipt_center('/\\____'),
+        hz_receipt_center('__/|_||_\\___'),
         hz_receipt_center('HAVENZEN'),
         hz_receipt_center('Trip Receipt'),
         hz_receipt_center('Barugo, Leyte'),
@@ -222,7 +224,7 @@ function hz_render_receipt_html(array $booking): string
 
     $html = '<article class="receipt-card">';
     $html .= '<header class="receipt-brand">';
-    $html .= '<div class="receipt-mark">HZ</div>';
+    $html .= '<div class="receipt-mark receipt-mark-vehicle" aria-hidden="true"><span class="receipt-roof"></span><span class="receipt-vehicle-body"><span></span><span></span></span></div>';
     $html .= '<div class="receipt-brand-copy">';
     $html .= '<h1>HAVENZEN</h1>';
     $html .= '<p>Barugo, Leyte</p>';
@@ -296,9 +298,11 @@ foreach ($line in $lines) {
     if (-not $logoPrinted -and $line.Trim() -eq 'HAVENZEN') {
         Add-Bytes ([byte[]](0x1B,0x61,0x01)) # Center align
         Add-Bytes ([byte[]](0x1B,0x45,0x01)) # Bold on
+        Add-Bytes ([byte[]](0x1B,0x34)) # Italic on where supported
         Add-Bytes ([byte[]](0x1D,0x21,0x11)) # Double width and height
         Add-Text "HAVENZEN`n"
         Add-Bytes ([byte[]](0x1D,0x21,0x00)) # Normal text size
+        Add-Bytes ([byte[]](0x1B,0x35)) # Italic off where supported
         Add-Bytes ([byte[]](0x1B,0x45,0x00)) # Bold off
         Add-Bytes ([byte[]](0x1B,0x61,0x00)) # Left align
         $logoPrinted = $true
