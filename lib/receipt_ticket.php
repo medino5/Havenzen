@@ -90,6 +90,13 @@ function hz_receipt_baggage_fee(array $booking): float
     return defined('BAGGAGE_FEE_PER_BAG') ? $baggageCount * BAGGAGE_FEE_PER_BAG : 0.0;
 }
 
+function hz_receipt_travel_fare(array $booking): float
+{
+    $totalAmount = hz_receipt_total_amount($booking);
+    $baggageFee = hz_receipt_baggage_fee($booking);
+    return max(0.0, $totalAmount - $baggageFee);
+}
+
 function hz_receipt_passenger_count(array $booking): int
 {
     return max(1, intval($booking['passenger_count'] ?? 1));
@@ -98,6 +105,7 @@ function hz_receipt_passenger_count(array $booking): int
 function hz_build_receipt_text(array $booking): string
 {
     $fareAmount = hz_receipt_total_amount($booking);
+    $travelFare = hz_receipt_travel_fare($booking);
     $baggageCount = hz_receipt_baggage_count($booking);
     $baggageFee = hz_receipt_baggage_fee($booking);
     $passengerCount = hz_receipt_passenger_count($booking);
@@ -149,11 +157,17 @@ function hz_build_receipt_text(array $booking): string
     }
 
     $receiptLines[] = str_repeat('-', 28);
+    $receiptLines = array_merge($receiptLines, hz_receipt_center('PAYMENT DETAILS'));
+    $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Ticket Fare', 'PHP ' . number_format($travelFare, 2)));
     if (defined('BAGGAGE_FEE_PER_BAG')) {
-        $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Baggage', $baggageCount . ' x PHP ' . number_format((float) BAGGAGE_FEE_PER_BAG, 2)));
+        $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Baggage Count', (string) $baggageCount));
+        $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Baggage Rate', 'PHP ' . number_format((float) BAGGAGE_FEE_PER_BAG, 2) . '/bag'));
+        $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Baggage Fee', 'PHP ' . number_format($baggageFee, 2)));
+    } else {
+        $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Baggage Count', (string) $baggageCount));
         $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Baggage Fee', 'PHP ' . number_format($baggageFee, 2)));
     }
-    $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Amount', 'PHP ' . number_format($fareAmount, 2)));
+    $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Total Bill', 'PHP ' . number_format($fareAmount, 2)));
 
     if ($notesShort !== '') {
         $receiptLines[] = str_repeat('-', 28);
@@ -172,6 +186,7 @@ function hz_build_receipt_text(array $booking): string
 function hz_render_receipt_html(array $booking): string
 {
     $fareAmount = hz_receipt_total_amount($booking);
+    $travelFare = hz_receipt_travel_fare($booking);
     $baggageCount = hz_receipt_baggage_count($booking);
     $baggageFee = hz_receipt_baggage_fee($booking);
     $passengerCount = hz_receipt_passenger_count($booking);
@@ -193,7 +208,9 @@ function hz_render_receipt_html(array $booking): string
         ['label' => 'Driver Phone', 'value' => preg_replace('/\s+/', '', (string) ($booking['driver_phone'] ?? '')) ?: 'N/A'],
         ['label' => 'Vehicle', 'value' => hz_receipt_clean_text((string) (($booking['vehicle_name'] ?? '') ?: 'Not assigned'))],
         ['label' => 'Plate', 'value' => (string) ($booking['license_plate'] ?? 'N/A')],
-        ['label' => 'Baggage', 'value' => $baggageCount . ' bag(s)'],
+        ['label' => 'Ticket Fare', 'value' => 'PHP ' . number_format($travelFare, 2)],
+        ['label' => 'Baggage Count', 'value' => $baggageCount . ' bag(s)'],
+        ['label' => 'Baggage Rate', 'value' => defined('BAGGAGE_FEE_PER_BAG') ? 'PHP ' . number_format((float) BAGGAGE_FEE_PER_BAG, 2) . '/bag' : 'N/A'],
         ['label' => 'Baggage Fee', 'value' => 'PHP ' . number_format($baggageFee, 2)],
         ['label' => 'Total Bill', 'value' => 'PHP ' . number_format($fareAmount, 2), 'highlight' => true],
     ];
