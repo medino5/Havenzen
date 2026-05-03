@@ -123,10 +123,9 @@ function hz_build_receipt_text(array $booking): string
     $contactShort = preg_replace('/\s+/', '', (string) ($booking['passenger_phone'] ?? ''));
 
     $receiptLines = array_merge(
-        hz_receipt_center('   __________   '),
-        hz_receipt_center(' _/|  HZ  |\\_  '),
-        hz_receipt_center('|__|______|__| '),
-        hz_receipt_center('HAVENZEN'),
+        [str_repeat('=', 28)],
+        ['|     H A V E N Z E N      |'],
+        [str_repeat('=', 28)],
         hz_receipt_center('Trip Receipt'),
         hz_receipt_center('Barugo, Leyte'),
         hz_receipt_center('Call ' . HAVENZEN_CONTACT_NUMBER),
