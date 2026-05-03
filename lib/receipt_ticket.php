@@ -253,8 +253,41 @@ function hz_send_raw_receipt_to_printer(string $receiptText, string $printerName
 $ErrorActionPreference = 'Stop'
 $printerName = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('__PRINTER_B64__'))
 $filePath = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String('__FILE_B64__'))
-$text = [System.IO.File]::ReadAllText($filePath, [System.Text.Encoding]::ASCII)
-$bytes = [byte[]](0x1B,0x40) + [System.Text.Encoding]::ASCII.GetBytes($text) + [byte[]](0x0A,0x0A,0x0A)
+$encoding = [System.Text.Encoding]::ASCII
+$lines = [System.IO.File]::ReadAllLines($filePath, $encoding)
+$bytesList = New-Object 'System.Collections.Generic.List[Byte]'
+
+function Add-Bytes {
+    param([byte[]]$Chunk)
+    $bytesList.AddRange($Chunk)
+}
+
+function Add-Text {
+    param([string]$Value)
+    Add-Bytes ($encoding.GetBytes($Value))
+}
+
+Add-Bytes ([byte[]](0x1B,0x40))
+
+$logoPrinted = $false
+foreach ($line in $lines) {
+    if (-not $logoPrinted -and $line.Trim() -eq 'HAVENZEN') {
+        Add-Bytes ([byte[]](0x1B,0x61,0x01)) # Center align
+        Add-Bytes ([byte[]](0x1B,0x45,0x01)) # Bold on
+        Add-Bytes ([byte[]](0x1D,0x21,0x11)) # Double width and height
+        Add-Text "HAVENZEN`n"
+        Add-Bytes ([byte[]](0x1D,0x21,0x00)) # Normal text size
+        Add-Bytes ([byte[]](0x1B,0x45,0x00)) # Bold off
+        Add-Bytes ([byte[]](0x1B,0x61,0x00)) # Left align
+        $logoPrinted = $true
+        continue
+    }
+
+    Add-Text ($line + "`n")
+}
+
+Add-Bytes ([byte[]](0x0A,0x0A,0x0A))
+$bytes = $bytesList.ToArray()
 
 $code = @"
 using System;
