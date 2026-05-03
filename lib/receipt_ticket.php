@@ -109,6 +109,7 @@ function hz_build_receipt_text(array $booking): string
     $dropoffShort = hz_receipt_clean_text((string) ($booking['dropoff_location'] ?? ''));
     $routeShort = hz_receipt_clean_text((string) ($booking['route_name'] ?? ''));
     $driverShort = hz_receipt_clean_text((string) (($booking['driver_name'] ?? '') ?: 'Not assigned'));
+    $driverPhoneShort = preg_replace('/\s+/', '', (string) ($booking['driver_phone'] ?? ''));
     $vehicleShort = hz_receipt_clean_text((string) (($booking['vehicle_name'] ?? '') ?: 'Not assigned'));
     $notesShort = hz_receipt_clean_text((string) ($booking['notes'] ?? ''));
     $contactShort = preg_replace('/\s+/', '', (string) ($booking['passenger_phone'] ?? ''));
@@ -137,6 +138,9 @@ function hz_build_receipt_text(array $booking): string
     $receiptLines = array_merge($receiptLines, hz_receipt_wrap('To', $dropoffShort));
     $receiptLines[] = str_repeat('-', 28);
     $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Driver', $driverShort));
+    if ($driverPhoneShort !== '') {
+        $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Driver Phone', $driverPhoneShort));
+    }
     $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Vehicle', $vehicleShort));
     $receiptLines = array_merge($receiptLines, hz_receipt_wrap('Plate', (string) ($booking['license_plate'] ?? 'N/A')));
 
@@ -186,6 +190,7 @@ function hz_render_receipt_html(array $booking): string
         ['label' => 'From', 'value' => hz_receipt_clean_text((string) ($booking['pickup_location'] ?? '')) ?: 'N/A'],
         ['label' => 'To', 'value' => hz_receipt_clean_text((string) ($booking['dropoff_location'] ?? '')) ?: 'N/A'],
         ['label' => 'Driver', 'value' => hz_receipt_clean_text((string) (($booking['driver_name'] ?? '') ?: 'Not assigned'))],
+        ['label' => 'Driver Phone', 'value' => preg_replace('/\s+/', '', (string) ($booking['driver_phone'] ?? '')) ?: 'N/A'],
         ['label' => 'Vehicle', 'value' => hz_receipt_clean_text((string) (($booking['vehicle_name'] ?? '') ?: 'Not assigned'))],
         ['label' => 'Plate', 'value' => (string) ($booking['license_plate'] ?? 'N/A')],
         ['label' => 'Baggage', 'value' => $baggageCount . ' bag(s)'],
@@ -341,13 +346,32 @@ try {
 POWERSHELL;
 
     $psScript = str_replace(['__PRINTER_B64__', '__FILE_B64__'], [$printerB64, $fileB64], $psScript);
-    $encoded = base64_encode(mb_convert_encoding($psScript, 'UTF-16LE', 'UTF-8'));
-    $command = 'powershell.exe -NoProfile -NonInteractive -EncodedCommand ' . $encoded;
+    $scriptFile = tempnam(sys_get_temp_dir(), 'hz_print_');
+    if ($scriptFile === false) {
+        @unlink($tempFile);
+        $errorMessage = 'Could not create temporary print script.';
+        return false;
+    }
+
+    $scriptPath = $scriptFile . '.ps1';
+    if (!@rename($scriptFile, $scriptPath)) {
+        $scriptPath = $scriptFile;
+    }
+
+    if (file_put_contents($scriptPath, $psScript, LOCK_EX) === false) {
+        @unlink($tempFile);
+        @unlink($scriptPath);
+        $errorMessage = 'Could not write temporary print script.';
+        return false;
+    }
+
+    $command = 'powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File ' . escapeshellarg($scriptPath);
 
     $output = [];
     $exitCode = 0;
     exec($command . ' 2>&1', $output, $exitCode);
     @unlink($tempFile);
+    @unlink($scriptPath);
 
     if ($exitCode !== 0) {
         $errorMessage = trim(implode("\n", $output)) ?: 'PowerShell direct print failed.';
