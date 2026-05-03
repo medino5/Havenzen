@@ -1,0 +1,27 @@
+.codex-runtime/
+
+# Local machine configuration and secrets
+config.php
+*.env
+
+# Local database exports and backups
+*.sql
+!migrations/*.sql
+*.bak
+*.backup
+
+# Runtime/generated files
+storage/logs/
+storage/cache/
+storage/*.log
+uploads/
+
+# ESP32 sketches with local Wi-Fi/API values
+esp32_gps_tracker_local.ino
+esp32_gps_tracker_local/esp32_gps_tracker_local.ino
+
+# OS/editor noise
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/

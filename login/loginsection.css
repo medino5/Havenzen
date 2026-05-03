@@ -1,0 +1,638 @@
+/* --- Responsive Breakpoints --- */
+@media (max-width: 360px) {
+    html { font-size: 13px; }
+    .container, .card-container, .form-section { padding: 0.5rem !important; }
+    .btn, .form-control { font-size: 1rem; padding: 0.5rem 0.7rem; }
+}
+@media (min-width: 361px) and (max-width: 414px) {
+    html { font-size: 14px; }
+    .container, .card-container, .form-section { padding: 0.7rem !important; }
+}
+@media (min-width: 415px) and (max-width: 480px) {
+    html { font-size: 15px; }
+    .container, .card-container, .form-section { padding: 1rem !important; }
+}
+@media (min-width: 481px) and (max-width: 1023px) {
+    html { font-size: 16px; }
+    .card-container { flex-direction: column; }
+}
+@media (min-width: 1024px) and (max-width: 1366px) {
+    html { font-size: 17px; }
+}
+@media (min-width: 1367px) and (max-width: 1600px) {
+    html { font-size: 18px; }
+}
+@media (min-width: 1601px) and (max-width: 2559px) {
+    html { font-size: 19px; }
+}
+@media (min-width: 2560px) {
+    html { font-size: 20px; }
+    .container { max-width: 1800px; }
+}
+body, html { overflow-x: hidden; }
+.container, .card-container, .form-section { width: 100%; max-width: 100vw; box-sizing: border-box; }
+.card-container { max-width: 100%; box-sizing: border-box; }
+.btn, .form-control { font-size: clamp(1rem, 2vw, 1.2rem); line-height: 1.5; }
+.card-container, .form-section { padding: clamp(1rem, 2vw, 2rem); margin-bottom: clamp(1rem, 2vw, 2rem); }
+/* Enhanced Login Section Styles - Minimalist Pink Theme Revamp */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Color Palette - Retained */
+    --primary-pink: #e91e63;
+    --light-pink: #f8bbd9;
+    --dark-pink: #c2185b;
+    
+    /* Neutrals - Simplified for Minimalism */
+    --white: #ffffff;
+    --light-gray: #f4f5f7; /* Cleaner, flatter background */
+    --medium-gray: #e0e0e0; /* For clean borders */
+    --dark-gray: #212529; /* High-contrast text */
+    --text-color: #495057; /* Standard text color */
+    
+    /* Layout & Effects - Simplified and Compact */
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Minimalist, subtle shadow */
+    --shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.1);
+    --border-radius-lg: 12px; /* Uniform, cleaner rounding for containers */
+    --border-radius-sm: 6px;
+    --transition-fast: all 0.2s ease-in-out;
+}
+
+/* --- Base Reset and Typography --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    /* Simplified background to light gray, removed heavy gradient and animation */
+    background: var(--light-gray);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+/* Subtle Custom Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(233, 30, 99, 0.2) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: rgba(233, 30, 99, 0.15);
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: rgba(233, 30, 99, 0.3);
+}
+
+body::before {
+    content: none; /* Removed background gradient/floating effects */
+}
+
+/* Removed @keyframes backgroundFloat */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px; /* Made the container slightly narrower for focus */
+    padding: 20px; /* Reduced overall padding */
+    animation: none; /* Removed fadeIn animation */
+}
+
+/* Removed @keyframes fadeIn */
+
+.header-text {
+    text-align: center;
+    color: var(--dark-gray);
+    margin-bottom: 30px; /* Reduced margin */
+    animation: none; /* Removed slideInDown animation */
+}
+
+/* Removed @keyframes slideInDown */
+
+.header-text h1 {
+    font-size: 2.2rem; /* Smaller, more professional heading */
+    margin-bottom: 10px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-shadow: none; /* Removed text shadow */
+    color: var(--dark-gray);
+}
+
+.header-text h1 span {
+    /* Used solid color instead of gradient clip */
+    color: var(--primary-pink);
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+}
+
+.header-text p {
+    font-size: 1rem; /* Smaller paragraph */
+    opacity: 0.8;
+    font-weight: 400;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.card-container {
+    display: flex;
+    background: var(--white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    width: 100%;
+    max-width: 800px; /* Reduced max width */
+    transition: var(--transition-fast);
+    position: relative;
+    animation: none; /* Removed scaleIn animation */
+    border: 1px solid var(--medium-gray); /* Clean border */
+}
+
+/* Removed @keyframes scaleIn */
+
+.card-container:hover {
+    box-shadow: var(--shadow-hover);
+    transform: none; /* Removed translation on hover */
+}
+
+.card-container::before {
+    content: none; /* Removed transparent gradient overlay */
+}
+
+.form-section {
+    padding: 40px 35px; /* Reduced padding */
+    flex: 1;
+    background: var(--white);
+    position: relative;
+    z-index: 1;
+    animation: none; /* Removed slideInLeft animation */
+}
+
+/* Removed @keyframes slideInLeft */
+
+.illustration-section {
+    flex: 1;
+    padding: 40px 35px; /* Reduced padding */
+    background: var(--primary-pink); /* Solid primary color instead of heavy gradient */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    animation: none; /* Removed slideInRight animation */
+}
+
+/* Removed @keyframes slideInRight */
+
+.illustration-section::before {
+    content: none; /* Removed floating gradient effect */
+}
+
+/* Removed @keyframes float */
+
+.bus-animation {
+    font-size: 4rem; /* Smaller icon */
+    margin-bottom: 20px;
+    animation: none; /* Removed busFloat animation */
+    filter: none; /* Removed drop-shadow */
+    position: relative;
+    z-index: 2;
+    color: var(--white);
+}
+
+/* Removed @keyframes busFloat */
+
+.illustration-text {
+    color: var(--white);
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.illustration-text h3 {
+    font-size: 1.5rem; /* Smaller heading */
+    margin-bottom: 10px;
+    font-weight: 600;
+    text-shadow: none; /* Removed text shadow */
+}
+
+.illustration-text p {
+    opacity: 0.9;
+    font-size: 0.95rem; /* Smaller paragraph */
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.form-section h2 {
+    color: var(--dark-gray); /* Solid dark gray for professionalism */
+    margin-bottom: 30px;
+    font-weight: 700;
+    font-size: 1.8rem; /* Smaller heading */
+    text-align: left; /* Left-aligned for a business form */
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    position: relative;
+}
+
+.form-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0; /* Aligned left with text */
+    transform: translateX(0);
+    width: 40px; /* Shorter divider */
+    height: 3px; /* Thinner divider */
+    background: var(--primary-pink); /* Solid color divider */
+    border-radius: 2px;
+}
+
+.form-group {
+    margin-bottom: 20px; /* More compact spacing */
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px; /* Reduced margin */
+    font-weight: 500;
+    color: var(--dark-gray);
+    font-size: 0.9rem; /* Smaller label */
+    transition: var(--transition-fast);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 15px; /* Reduced padding for compact look */
+    border: 1px solid var(--medium-gray); /* Thinner border */
+    border-radius: var(--border-radius-sm); /* Squarer radius */
+    box-sizing: border-box;
+    transition: var(--transition-fast);
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    background: var(--white);
+    position: relative;
+}
+
+.password-field {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-field input {
+    padding-right: 48px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #64748b;
+    cursor: pointer;
+    transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: var(--primary-pink);
+    background: rgba(233, 30, 99, 0.08);
+    transform: translateY(-1px);
+}
+
+.password-toggle:focus {
+    outline: 2px solid var(--primary-pink);
+    outline-offset: 2px;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-pink);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.15); /* Subtler focus shadow */
+    transform: none; /* Removed translation on focus */
+}
+
+.form-group input:focus + label {
+    color: var(--primary-pink);
+    transform: none; /* Removed translation on focus */
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 12px; /* Reduced padding */
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    color: var(--white);
+    font-weight: 600;
+    font-size: 1rem; /* Smaller font size */
+    background: var(--primary-pink); /* Solid color instead of gradient */
+    transition: var(--transition-fast);
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: none; /* Removed shadow */
+}
+
+.submit-btn::before {
+    content: none; /* Removed animated shine effect */
+}
+
+.submit-btn:hover {
+    transform: none; /* Removed translation on hover */
+    box-shadow: 0 4px 10px rgba(233, 30, 99, 0.3); /* Subtle shadow on hover */
+    background: var(--dark-pink);
+}
+
+.submit-btn:active {
+    transform: none;
+}
+
+.link-text {
+    text-align: center;
+    margin-top: 20px; /* Reduced margin */
+    font-size: 0.9rem;
+}
+
+.link-text a {
+    color: var(--primary-pink);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-fast);
+    position: relative;
+    padding: 0; /* Removed padding */
+    border-radius: 0;
+}
+
+.link-text a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px; /* Thinner underline */
+    background: var(--primary-pink); /* Solid color underline */
+    transition: width 0.3s ease;
+}
+
+.link-text a:hover {
+    color: var(--dark-pink);
+}
+
+.link-text a:hover::after {
+    width: 100%;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 15px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-fast);
+    padding: 6px 10px; /* More compact padding */
+    border-radius: var(--border-radius-sm);
+    font-size: 0.9rem;
+}
+
+.back-link:hover {
+    color: var(--primary-pink);
+    background: rgba(233, 30, 99, 0.05); /* Very subtle hover background */
+    transform: none; /* Removed translation on hover */
+}
+
+.error-message {
+    /* Used solid colors and cleaner borders */
+    background: #fff3f3;
+    color: #c62828;
+    padding: 12px 15px; /* Reduced padding */
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #c62828;
+    border-left: 4px solid #c62828;
+    margin-bottom: 20px;
+    font-weight: 500;
+    animation: none; /* Removed shake animation */
+    box-shadow: none;
+    font-size: 0.95rem;
+}
+
+.success-message {
+    /* Used solid colors and cleaner borders */
+    background: #f3fff3;
+    color: #2e7d32;
+    padding: 12px 15px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid #2e7d32;
+    border-left: 4px solid #2e7d32;
+    margin-bottom: 20px;
+    font-weight: 500;
+    animation: none; /* Removed slideInDown animation */
+    box-shadow: none;
+    font-size: 0.95rem;
+}
+
+/* Removed @keyframes shake */
+/* Removed @keyframes slideInDown (error/success specific) */
+
+/* Floating particles in background */
+.particles {
+    content: none; /* Removed particles */
+}
+
+.particle {
+    content: none; /* Removed particles */
+}
+
+/* Removed @keyframes floatParticle */
+
+/* Custom focus styles */
+input:focus,
+button:focus,
+a:focus {
+    outline: 2px solid var(--primary-pink);
+    outline-offset: 3px; /* Slightly more prominent offset */
+}
+
+/* Loading animation - Simplified */
+.loading {
+    display: inline-block;
+    width: 16px; /* Smaller loader */
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--white);
+    animation: spin 0.8s linear infinite; /* Faster, simpler spin */
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Media Query for smaller screens (Adjusted for new compact sizes) */
+@media (max-width: 968px) {
+    .card-container {
+        flex-direction: column;
+        max-width: 450px; /* Made the card container vertically aligned and narrower */
+    }
+    
+    .illustration-section {
+        min-height: 200px;
+        padding: 30px 25px;
+    }
+    
+    .form-section {
+        padding: 30px 25px;
+    }
+    
+    .bus-animation {
+        font-size: 3.5rem;
+    }
+    
+    .header-text h1 {
+        font-size: 2rem;
+    }
+    
+    .form-section h2 {
+        font-size: 1.6rem;
+    }
+
+    .form-section h2::after {
+        left: 50%;
+        transform: translateX(-50%); /* Center the divider on mobile */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .header-text h1 {
+        font-size: 1.8rem;
+    }
+    
+    .header-text p {
+        font-size: 0.95rem;
+    }
+    
+    .bus-animation {
+        font-size: 3rem;
+    }
+    
+    .illustration-text h3 {
+        font-size: 1.3rem;
+    }
+    
+    .form-group input {
+        padding: 12px 14px;
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .submit-btn {
+        padding: 12px;
+        min-height: 44px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .card-container {
+        max-width: 100%;
+        margin: 10px;
+    }
+    
+    .illustration-section {
+        min-height: 180px;
+        padding: 20px 15px;
+    }
+    
+    .form-section {
+        padding: 25px 20px;
+    }
+    
+    .header-text h1 {
+        font-size: 1.5rem;
+    }
+    
+    .header-text p {
+        font-size: 0.85rem;
+    }
+    
+    .form-section h2 {
+        font-size: 1.4rem;
+    }
+    
+    .bus-animation {
+        font-size: 2.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 18px;
+    }
+    
+    .form-group input {
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    .link-text {
+        font-size: 0.85rem;
+    }
+}
+
+/* Custom scrollbar - Simplified */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e9e9e9;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-pink);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-pink);
+}
