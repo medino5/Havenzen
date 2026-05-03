@@ -123,9 +123,8 @@ function hz_build_receipt_text(array $booking): string
     $contactShort = preg_replace('/\s+/', '', (string) ($booking['passenger_phone'] ?? ''));
 
     $receiptLines = array_merge(
-        hz_receipt_center('/\\____'),
-        hz_receipt_center('__/|_||_\\___'),
-        hz_receipt_center('HAVENZEN'),
+        hz_receipt_center('[ HZ ]'),
+        ['HAVENZEN'],
         hz_receipt_center('Trip Receipt'),
         hz_receipt_center('Barugo, Leyte'),
         hz_receipt_center('Call ' . HAVENZEN_CONTACT_NUMBER),
@@ -294,7 +293,18 @@ function Add-Text {
 Add-Bytes ([byte[]](0x1B,0x40))
 
 $logoPrinted = $false
+$markPrinted = $false
 foreach ($line in $lines) {
+    if (-not $markPrinted -and $line.Trim() -eq '[ HZ ]') {
+        Add-Bytes ([byte[]](0x1B,0x61,0x01)) # Center align
+        Add-Bytes ([byte[]](0x1B,0x45,0x01)) # Bold on
+        Add-Text "[ HZ ]`n"
+        Add-Bytes ([byte[]](0x1B,0x45,0x00)) # Bold off
+        Add-Bytes ([byte[]](0x1B,0x61,0x00)) # Left align
+        $markPrinted = $true
+        continue
+    }
+
     if (-not $logoPrinted -and $line.Trim() -eq 'HAVENZEN') {
         Add-Bytes ([byte[]](0x1B,0x61,0x01)) # Center align
         Add-Bytes ([byte[]](0x1B,0x45,0x01)) # Bold on
