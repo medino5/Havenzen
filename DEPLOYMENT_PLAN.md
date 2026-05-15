@@ -27,7 +27,14 @@ This plan keeps the current XAMPP workflow working while giving the project a cl
 
 ## Phase 2: Prepare A Production Server
 
-Recommended starting stack:
+Recommended demo stack:
+
+- Railway Web service built from the repo `Dockerfile`
+- Railway MySQL template
+- PHP 8.3
+- Railway public HTTPS domain
+
+Recommended production stack:
 
 - Ubuntu VPS or managed PHP hosting
 - Nginx or Apache
@@ -37,12 +44,13 @@ Recommended starting stack:
 
 Server setup tasks:
 
-1. Create a production database and database user with limited permissions.
-2. Upload the app into the web root or deploy through Git.
-3. Copy `config.example.php` to `config.php` on the server.
-4. Set production credentials and API keys.
-5. Import the baseline schema, then run pending migrations.
-6. Lock down writable folders so only required upload/runtime directories are writable.
+1. Create a database service and database user with limited permissions.
+2. Deploy the app through GitHub.
+3. Set production credentials and API keys through environment variables.
+4. Import `database/schema.sql`, then run pending migrations.
+5. Lock down writable folders so only required upload/runtime directories are writable.
+
+Railway-specific instructions are in `RAILWAY_DEPLOYMENT.md`.
 
 ## Phase 3: GPS Tracker Deployment
 

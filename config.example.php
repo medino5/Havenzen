@@ -1,12 +1,13 @@
 <?php
 // Copy this file to config.php and update the values for your environment.
 
-$servername = getenv('DB_HOST') ?: 'localhost';
-$username = getenv('DB_USER') ?: 'root';
-$password = getenv('DB_PASSWORD') ?: '';
-$dbname = getenv('DB_NAME') ?: 'havenzen_db';
+$servername = getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: 'localhost';
+$username = getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: getenv('MYSQLPASSWORD') ?: '';
+$dbname = getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'havenzen_db';
+$dbport = intval(getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: 3306);
 
-$conn = new mysqli($servername, $username, $password, $dbname);
+$conn = new mysqli($servername, $username, $password, $dbname, $dbport);
 
 if ($conn->connect_error) {
     die('Connection failed: ' . $conn->connect_error);
