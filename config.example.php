@@ -1,11 +1,22 @@
 <?php
 // Copy this file to config.php and update the values for your environment.
 
-$servername = getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: 'localhost';
-$username = getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root';
-$password = getenv('DB_PASSWORD') ?: getenv('MYSQLPASSWORD') ?: '';
-$dbname = getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'havenzen_db';
-$dbport = intval(getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: 3306);
+$databaseUrl = getenv('MYSQL_URL') ?: getenv('DATABASE_URL') ?: '';
+$databaseParts = $databaseUrl ? parse_url($databaseUrl) : false;
+
+if ($databaseParts && in_array($databaseParts['scheme'] ?? '', ['mysql', 'mysql2', 'mariadb'], true)) {
+    $servername = $databaseParts['host'] ?? 'localhost';
+    $username = isset($databaseParts['user']) ? urldecode($databaseParts['user']) : 'root';
+    $password = isset($databaseParts['pass']) ? urldecode($databaseParts['pass']) : '';
+    $dbname = isset($databaseParts['path']) ? ltrim($databaseParts['path'], '/') : 'havenzen_db';
+    $dbport = intval($databaseParts['port'] ?? 3306);
+} else {
+    $servername = getenv('DB_HOST') ?: getenv('MYSQLHOST') ?: 'localhost';
+    $username = getenv('DB_USER') ?: getenv('MYSQLUSER') ?: 'root';
+    $password = getenv('DB_PASSWORD') ?: getenv('MYSQLPASSWORD') ?: '';
+    $dbname = getenv('DB_NAME') ?: getenv('MYSQLDATABASE') ?: 'havenzen_db';
+    $dbport = intval(getenv('DB_PORT') ?: getenv('MYSQLPORT') ?: 3306);
+}
 
 $conn = new mysqli($servername, $username, $password, $dbname, $dbport);
 

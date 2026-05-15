@@ -123,6 +123,8 @@ let bookingMarkers = {};
 let mapInitialized = false;
 let firstDataLoad = true;
 let watchId = null;
+const GPS_UPDATE_INTERVAL_MS = 10000;
+let lastLocationSentAt = 0;
 
 function initMap() {
     try {
@@ -202,6 +204,8 @@ function updateRefreshTimer() {
 // Start tracking driver's location
 function startLocationTracking() {
     if (navigator.geolocation) {
+        if (watchId) return;
+
         watchId = navigator.geolocation.watchPosition(
             (position) => {
                 const newPos = {
@@ -216,8 +220,11 @@ function startLocationTracking() {
                     driverMap.setZoom(17);
                 }
                 
-                // Send location to server every 10 seconds
-                updateDriverLocation(newPos.lat, newPos.lng);
+                const now = Date.now();
+                if (lastLocationSentAt === 0 || now - lastLocationSentAt >= GPS_UPDATE_INTERVAL_MS) {
+                    lastLocationSentAt = now;
+                    updateDriverLocation(newPos.lat, newPos.lng);
+                }
             },
             (error) => {
                 console.error('Geolocation error:', error);
@@ -225,8 +232,8 @@ function startLocationTracking() {
             },
             {
                 enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 10000 // 10 seconds
+                timeout: 10000,
+                maximumAge: GPS_UPDATE_INTERVAL_MS
             }
         );
     }
@@ -765,6 +772,7 @@ function toggleOnlineStatus() {
             } else if (watchId) {
                 navigator.geolocation.clearWatch(watchId);
                 watchId = null;
+                lastLocationSentAt = 0;
             }
         } else {
             // Revert toggle on error

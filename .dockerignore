@@ -5,6 +5,7 @@ config.php
 *.env
 
 havenzen_db*.sql
+*_export.sql
 *.bak
 *.backup
 

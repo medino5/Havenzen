@@ -511,7 +511,7 @@ $google_maps_script_url = google_maps_script_url(null, ['places', 'geometry']);
 
             // Initialize vehicle tracking
             updateVehicleLocation();
-            updateInterval = setInterval(updateVehicleLocation, 5000); // Update every 5 seconds
+            updateInterval = setInterval(updateVehicleLocation, 10000); // Update every 10 seconds
         }
 
         function drawMainRoute() {

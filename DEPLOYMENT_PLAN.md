@@ -29,10 +29,11 @@ This plan keeps the current XAMPP workflow working while giving the project a cl
 
 Recommended demo stack:
 
-- Railway Web service built from the repo `Dockerfile`
-- Railway MySQL template
+- Render Free Web Service built from the repo `Dockerfile`
+- External MySQL/MariaDB database
+- Railway MySQL can be used temporarily as the external database while Render hosts the app
 - PHP 8.3
-- Railway public HTTPS domain
+- Render public HTTPS domain
 
 Recommended production stack:
 
@@ -50,11 +51,12 @@ Server setup tasks:
 4. Import `database/schema.sql`, then run pending migrations.
 5. Lock down writable folders so only required upload/runtime directories are writable.
 
-Railway-specific instructions are in `RAILWAY_DEPLOYMENT.md`.
+Render-specific instructions are in `RENDER_DEPLOYMENT.md`.
+Railway-specific instructions are still in `RAILWAY_DEPLOYMENT.md` if you later choose Railway again.
 
 ## Phase 3: GPS Tracker Deployment
 
-For production GPS tracking, update the ESP32 sketch to post to the hosted domain:
+For production GPS tracking with ESP32, update the sketch to post to the hosted domain:
 
 ```text
 https://your-domain.example/api/gps_tracking.php
@@ -65,6 +67,8 @@ Tracker requirements:
 - ESP32 must have internet access through Wi-Fi or hotspot.
 - `API_KEY` in the sketch must match `GPS_TRACKING_API_KEY` on the server.
 - The server must allow HTTPS POST requests to `api/gps_tracking.php`.
+
+For the current phone-based GPS demo, open the driver map page on the driver's phone, allow location permission, and keep the page open. The app sends driver location updates about every 10 seconds.
 
 ## Phase 4: Printing Strategy
 
